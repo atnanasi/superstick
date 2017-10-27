@@ -1,6 +1,6 @@
 import ui
 
-from models import add_item, find_items_by_id, start_transaction, add_items_to_transaction, get_amount_of_transaction, end_transaction
+from models import add_item as m_add_item, find_items_by_id, start_transaction, add_items_to_transaction, get_amount_of_transaction, end_transaction
 
 def payment():
     while True:
@@ -34,7 +34,7 @@ def payment():
     print("Amount: ¥{}".format(amount))
 
     while True:
-        receipt = int(ui.question("Pay"))
+        receipt = int(ui.question("Receipt?"))
 
         change = receipt - amount
 
@@ -52,10 +52,16 @@ def payment():
     print('end transaction (tran_id: {})'.format(tran_id))
 
 def add_item():
-    return
+    while True:
+        name = ui.question('Name?')
+        price = int(ui.question('Price?'))
 
-def get_items():
-    return
+        if (0 > price):
+            print('! price is minus.')
+            continue
 
-def edit_item(item_id):
-    return
+        print("{} (¥{})".format(name, price))
+        if ui.isok("Is correct?"):
+            break
+
+    m_add_item(name, price)

@@ -15,13 +15,10 @@ def main():
         controller.add_item()
 
     elif args[1]=="items":
-        print('\n'.join(['[{}] 名称: {}, 価格: {}'.format(item.id, item.name, item.price) for item in get_items()]))
-
-    elif "item@" in args[1]:
-        controller.edit_item(args[1].split("@")[1:])
+        print('\n'.join(['[{}] {} (¥{})'.format(item.id, item.name, item.price) for item in get_items()]))
 
     else:
-        print("superstick: start,item,items,item@%n")
+        print("superstick: start, add, items")
 
 if __name__ == '__main__':
     main()
