@@ -3,7 +3,7 @@ import ui
 from models import add_item as m_add_item, find_items_by_id, start_transaction, add_items_to_transaction, get_amount_of_transaction, end_transaction
 
 def payment():
-    print('> payment')
+    print('* On your mark...')
     while True:
         items = {}
 
@@ -12,9 +12,14 @@ def payment():
             its = item.split("*")
             items[its[0]] = int(its[1]) if len(its)==2 else 1
 
-        itemdata = find_items_by_id(items.keys())
+        item_keys = items.keys()
+        itemdata = find_items_by_id(item_keys)
 
-        print('\n'.join([
+        if (len(item_keys) is not len(itemdata)):
+            ui.warn('something went wrong, there are no items that has some IDs. please re-input.')
+            continue
+
+        ui.info('\n'.join([
             "'{}' (¥{}) x{}".format(item.name, item.price, items[str(item.id)])
             for item in itemdata
         ]))
@@ -23,7 +28,7 @@ def payment():
             break
 
     tran_id = start_transaction()
-    print("start transaction (tran_id: {})".format(tran_id))
+    ui.info("start transaction (tran_id: {})".format(tran_id))
 
     tran_item_ids = []
     for k, v in items.items():
@@ -32,7 +37,7 @@ def payment():
     add_items_to_transaction(tran_id, tran_item_ids)
 
     amount = get_amount_of_transaction(tran_id)
-    print("Amount: ¥{}".format(amount))
+    ui.info("Amount: ¥{}".format(amount))
 
     while True:
         receipt = int(ui.question("Receipt?"))
@@ -40,17 +45,17 @@ def payment():
         change = receipt - amount
 
         if (0 > change):
-            print('! change is minus or not number, re-input or request re-payment.')
+            ui.warn('change is minus or not number, re-input or request re-payment.')
             continue
 
-        print("Change: ¥{}".format(change))
+        ui.info("Change: ¥{}".format(change))
         
-        if ui.isok("Is correct?"):
+        if ui.isok("receipt amount and give change?"):
             break
 
     end_transaction(tran_id, amount, receipt, change)
 
-    print('end transaction (tran_id: {})'.format(tran_id))
+    ui.info('end transaction (tran_id: {})'.format(tran_id))
 
 def add_item():
     while True:
@@ -58,10 +63,10 @@ def add_item():
         price = int(ui.question('Price?'))
 
         if (0 > price):
-            print('! price is minus or not number.')
+            ui.warn('price is minus or not number.')
             continue
 
-        print("{} (¥{})".format(name, price))
+        ui.info("{} (¥{})".format(name, price))
         if ui.isok("Is correct?"):
             break
 
