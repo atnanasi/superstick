@@ -1,15 +1,11 @@
 def question(text):
     while True:
         answer = input(text+":")
-        if(not answer):
+        if answer:
             break
 
     return answer
 
 def isok(text):
-    while True:
-        answer = input(text+"(Yes->Enter / No-> other)")
-        if(not answer):
-            return False
-
-    return True
+    answer = input(text+"(Yes->Enter / No-> other)")
+    return False if answer else True

@@ -56,9 +56,9 @@ def find_items_by_id (ids: tuple) -> List[Item]:
 # () -> id
 def start_transaction () -> str:
   session = Session()
-  id = uuid()
+  id = str(uuid())
 
-  transaction = Transaction(id=id, date=datetime.now())
+  transaction = Transaction(id=id, datetime=datetime.now())
 
   session.add(transaction)
   session.commit()
@@ -71,7 +71,7 @@ def start_transaction () -> str:
 def add_items_to_transaction (transaction: str, items: List[int]) -> None:
   session = Session()
 
-  tis = [TransactionItem(id=uuid(), transaction=transaction, item=item) for item in item]
+  tis = [TransactionItem(id=str(uuid()), transaction=transaction, item=item) for item in items]
 
   session.add_all(tis)
 
@@ -79,10 +79,23 @@ def add_items_to_transaction (transaction: str, items: List[int]) -> None:
   session.close()
 
 
+def get_subtotal_of_transaction (transaction: str) -> int:
+  session = Session()
+
+  query = session.query(TransactionItem).filter_by(transaction=transaction)
+  results = query.all()
+
+  subtotal = sum([result.Item.price for result in results])
+
+  session.commit()
+  session.close()
+
+  return subtotal
+
 def end_transaction (transaction: str, amount: int, receipt: int = None, charge: int = None) -> None:
   session = Session()
 
-  tc = TransactionCharge(id=uuid(), amount=int, receipt=receipt, charge=charge)
+  tc = TransactionCharge(id=str(uuid()), amount=int, receipt=receipt, charge=charge)
 
   session.add(tc)
 
