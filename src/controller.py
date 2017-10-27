@@ -31,7 +31,10 @@ def payment():
     add_to_transaction_log()
 
 def add_item():
+    return
 
 def get_items():
+    return
 
 def edit_item(item_id):
+    return
