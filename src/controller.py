@@ -1,6 +1,6 @@
 import ui
 
-from models import add_item, find_items_by_id, start_transaction, add_items_to_transaction, get_subtotal_of_transaction
+from models import add_item, find_items_by_id, start_transaction, add_items_to_transaction, get_amount_of_transaction, end_transaction
 
 def payment():
     while True:
@@ -22,29 +22,34 @@ def payment():
             break
 
     tran_id = start_transaction()
-    print("tran_id: {}".format(tran_id))
+    print("start tran_id: {}".format(tran_id))
 
     tran_item_ids = []
-    print(items)
     for k, v in items.items():
         tran_item_ids += [k] * v
 
-
     add_items_to_transaction(tran_id, tran_item_ids)
 
-    print("Subtotal: ¥{}".format(get_subtotal_of_transaction(tran_id)))
+    amount = get_amount_of_transaction(tran_id)
+    print("Amount: ¥{}".format(amount))
 
     while True:
-        pay = int(ui.question("Pay"))
+        receipt = int(ui.question("Pay"))
 
-        change = pay - int(get_subtotal(items))
+        change = receipt - amount
 
-        print("Change:¥{}".format(change))
+        if (0 > change):
+            print('! change is minus, re-input or request re-payment.')
+            continue
+
+        print("Change: ¥{}".format(change))
         
         if ui.isok("Is correct?"):
             break
 
-    add_to_transaction_log()
+    end_transaction(tran_id, amount, receipt, change)
+
+    print('end transaction (tran_id: {})'.format(tran_id))
 
 def add_item():
     return

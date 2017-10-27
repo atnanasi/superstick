@@ -79,23 +79,23 @@ def add_items_to_transaction (transaction: str, items: List[int]) -> None:
   session.close()
 
 
-def get_subtotal_of_transaction (transaction: str) -> int:
+def get_amount_of_transaction (transaction: str) -> int:
   session = Session()
 
   query = session.query(TransactionItem).filter_by(transaction=transaction)
   results = query.all()
 
-  subtotal = sum([result.Item.price for result in results])
+  amount = sum([result.Item.price for result in results])
 
   session.commit()
   session.close()
 
-  return subtotal
+  return amount
 
-def end_transaction (transaction: str, amount: int, receipt: int = None, charge: int = None) -> None:
+def end_transaction (transaction: str, amount: int, receipt: int = None, change: int = None) -> None:
   session = Session()
 
-  tc = TransactionCharge(id=str(uuid()), amount=int, receipt=receipt, charge=charge)
+  tc = TransactionCharge(id=str(uuid()), amount=amount, receipt=receipt, change=change, transaction=transaction)
 
   session.add(tc)
 
