@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import List
 
 # initialize database
-engine = create_engine('sqlite:///superstick.sqlite3', echo=True)
+engine = create_engine('sqlite:///superstick.sqlite3')
 Base.metadata.create_all(engine)
 
 # Session sub-class
@@ -29,6 +29,17 @@ def add_item (name: str, price: int) -> int:
   session.close()
 
   return id
+
+
+def get_items () -> List[Item]:
+  session = Session()
+
+  query = session.query(Item)
+  results = query.all()
+
+  session.close
+
+  return results
 
 
 def find_items_by_id (ids: tuple) -> List[Item]:
