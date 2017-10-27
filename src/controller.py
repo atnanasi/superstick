@@ -3,6 +3,7 @@ import ui
 from models import add_item as m_add_item, find_items_by_id, start_transaction, add_items_to_transaction, get_amount_of_transaction, end_transaction
 
 def payment():
+    print('> payment')
     while True:
         items = {}
 
@@ -22,7 +23,7 @@ def payment():
             break
 
     tran_id = start_transaction()
-    print("start tran_id: {}".format(tran_id))
+    print("start transaction (tran_id: {})".format(tran_id))
 
     tran_item_ids = []
     for k, v in items.items():
@@ -39,7 +40,7 @@ def payment():
         change = receipt - amount
 
         if (0 > change):
-            print('! change is minus, re-input or request re-payment.')
+            print('! change is minus or not number, re-input or request re-payment.')
             continue
 
         print("Change: ¥{}".format(change))
@@ -57,7 +58,7 @@ def add_item():
         price = int(ui.question('Price?'))
 
         if (0 > price):
-            print('! price is minus.')
+            print('! price is minus or not number.')
             continue
 
         print("{} (¥{})".format(name, price))
