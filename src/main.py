@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+import controller
 
 args = sys.argv
 
@@ -7,7 +8,7 @@ def main():
     if args[1]=="start":
         payment()
 
-    elif args[1]=="item":
+    elif args[1]=="add":
         add_item()
 
     elif args[1]=="items":
